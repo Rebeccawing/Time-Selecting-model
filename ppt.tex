@@ -1,0 +1,270 @@
+\documentclass{beamer}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usetheme{Berlin}
+
+\title{GFTD REPORT}
+
+\subtitle{First Meeting}
+
+\author{Shiying Cui}
+
+
+\institute{Hyde Renaissance Capital Management Limited}
+
+
+\date{Sept.11th, 2017}
+
+\subject{GFTD Report}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{GFTD Strategy}
+
+\subsection{Introduction}
+
+\begin{frame}{Introduction}
+GFTD is based on the Time Selecting System TD and aimed at selecting transaction time on market index.
+  \begin{itemize}
+  \item {
+    The main logic is that we expect a reversal after a continuous rising or falling tendency.
+    \pause
+  }
+  \item {
+    There are three parameters in this strategy, named n$_1$,n$_2$,n$_3$ 
+    \pause
+  }
+  \end{itemize}
+\end{frame}
+
+\subsection{Implements}
+
+\begin{frame}{Implements}{Buy Trade Selection_start trade}
+  \begin{itemize}
+  \item {
+    Closing price of day i is lower than that of day i-n$_1$.
+	If this tendency continues for n$_2$ days, we start a count signal.
+	\pause
+  }
+  \item {
+    In the counting value process, if the three condition A,B and C are all satisfied, add count value by 1
+  \begin{itemize}
+  \item<3->{
+    A. Closing price of day i is higher than the highest price of day i-2
+  }
+  \item<4->{
+    B. The highest price of day i is higher than that of day i-1
+  }
+  \item<5->{
+    C. Closing price of day i is higher than that of day i-1
+  }
+  \end{itemize}
+  }
+  \item<6->{
+    If the count value reaches n$_3$, we start a buy trade.
+  }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Implements}{Buy Trade Selection_stop trade}
+  \begin{itemize}
+  \item<1->{
+    When to stop?
+	\begin{itemize}
+  \item<2->{
+    A. If there forms a sell trade.
+  }
+  \item<3->{
+    B. In the process of counting value, we record the lowest price of the market index.
+	Once the closing price in buy trade is lower than the record price, we stop this buy trade.
+  }
+    \end{itemize}
+  }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Implements}{Sell Trade Selection_start trade}
+  \begin{itemize}
+  \item {
+    Closing price of day i is higher than that of day i-n$_1$.
+	If this tendency continues for n$_2$ days, we start a count signal.
+	\pause
+  }
+  \item {
+    In the counting value process, if the three condition A,B and C are all satisfied, count value + 1
+  \begin{itemize}
+  \item<3->{
+    A. Closing price of day i is lower than the lowest price of day i-2
+  }
+  \item<4->{
+    B. The lowest price of day i is lower than that of day i-1
+  }
+  \item<5->{
+    C. Closing price of day i is lower than that of day i-1
+  }
+  \end{itemize}
+  }
+  \item<6->{
+    If the count value reaches n$_3$, we start a sell trade.
+  }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Implements}{Sell Trade Selection_stop trade}
+  \begin{itemize}
+  \item<7->{
+    When to stop?
+	\begin{itemize}
+  \item<8->{
+    A. If there forms a buy trade.
+  }
+  \item<9->{
+    B. In the process of counting value, we record the highest price of the market index.
+	Once the closing price in buy trade is higher than the record price, we stop this sell trade.
+  }
+    \end{itemize}
+  }
+  \end{itemize}
+\end{frame}
+
+\section{Results and Analysis}
+
+\subsection{Results}
+\begin{frame}{Results}{Evaluation of this Model}
+\small
+  \begin{tabular}{*{2}{c}}
+  \toprule
+  Index name & Description\\
+  \midrule
+  Cumulative Return & Return Performance\\
+  Annual Return & Return Performance\\
+  Transaction Count & Reflect the Selection Times\\
+  Win Count,Lose Count & Reflect the effectiveness\\
+  Winning Percentage & Return Performance\\
+  Average Return per Transaction & Return Performance\\
+  Average Winning Return per Transaction & Single Transaction Return\\
+  Average Losing Return per Transaction & Single Transaction Risk \\
+  Odds & Winning Return/Losing Return\\
+  Maximum Drawdown & Risk Performance\\
+  Maximum Number of Consecutive Wins & Reflect return in a period\\
+  Maximum Number of Consecutive Loses & Reflect risk in a period\\
+  \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Results}{Evaluation of this Model}
+We get 11 indexes and three comparison graphs to evaluate the model.
+\begin{figure}
+\centering
+\includegraphics[width=1.77in,height=1.50in]{cum_ret1.png}
+\caption{Cumulative Return and Market Index}
+\label{fig:graph}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Results}{Evaluation of this Model}
+We get 11 indexes and three comparison graphs to evaluate the model.
+\begin{figure}
+\centering
+\includegraphics[width=1.77in,height=1.50in]{cum_ret2.png}
+\caption{Cumulative Return and Market Index}
+\label{fig:graph}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Results}{Evaluation of this Model}
+We get 11 indexes and three comparison graphs to evaluate the model.
+\begin{figure}
+\centering
+\includegraphics[width=1.77in,height=1.5in]{max_drawdown.png}
+\caption{Maximum Drawdown and Market Index}
+\label{fig:graph}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Results}{Optimal Results}
+\small
+\begin{itemize}
+  \item{
+     In-sample: 2006-2014
+	 Out-sample: 2015-2017
+	 \pause
+  }
+  \item{
+     Set an assess function to evaluate the strategy: Annual return+k*maximum drawdown.
+	 k is a parameter that reflects the preference for high return or low risk.
+	 \pause
+  }
+  \end{itemize}
+  \begin{tabular}{*{4}{c}}
+  \toprule
+  Market Index & n$_1$ & n$_2$ & n$_3$\\
+  \midrule
+  SZ50 & 2 & 2 & 6\\
+  HS300 & 3 & 2 & 6\\
+  HS500 & 3 & 2 & 5\\
+  HS800 & 3 & 2 & 5\\
+  \bottomrule
+  \end{tabular}
+\end{frame}
+
+\subsection{Analysis}
+\begin{frame}{Analysis}
+\begin{block}{Parameter Estimation}
+Hope to find unbiased estimation for parameters n$_1$,n$_2$ and n$_3$
+\pause
+\end{block}
+\begin{block}{Robustness}
+The performance of parameters that near the optimal parameter combination is not very well.
+\pause
+\end{block}
+\begin{block}{Sample selection}
+Hope to explore different in-sample period such as 2009-2017 while out-sample is then 2006-2008.
+\pause
+\end{block}
+\end{frame}
+
+\section*{Summary}
+
+\begin{frame}{Summary}
+  \begin{itemize}
+  \item
+    This model can be edified flexibly and can satisfy arbitrary period.
+    \pause
+  \item
+    This model is over fitting when finding the optimal parameters.
+    \pause
+  \end{itemize}
+  \begin{itemize}
+  \item
+    Outlook
+    \pause
+    \begin{itemize}
+    \item
+      Build unbiased estimation of such parameters and develop more details in this model.
+      \pause
+    \item
+      Build a more scientific and complicated assess function of the model.
+      \pause
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\end{document}
