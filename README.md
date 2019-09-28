@@ -1,2 +1,2 @@
 # Time-Selecting-model
-An internship project: Select time by trend recognition of A-share stock indexes.
+An internship project: Build a timing strategy of A-Share stock index futures.
